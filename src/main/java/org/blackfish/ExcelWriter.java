@@ -32,7 +32,9 @@ public class ExcelWriter {
         for (LocalDate nap :
                 napiBontas.keySet()) {
             Row headerSor = sheet.createRow(rowNum++);
-            Cell napiHeader = headerSor.createCell(rowNum);
+            Cell napiHeader = headerSor.createCell(0);
+            napiHeader.setCellStyle(cellStyle);
+            napiHeader.setCellValue(nap);
             Row uresSor = sheet.createRow(rowNum++);
 
             for (String ember :
