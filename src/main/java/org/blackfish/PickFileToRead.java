@@ -11,6 +11,7 @@ public class PickFileToRead extends JFrame implements ActionListener {
     private JLabel datumLabel;
     private JLabel nevLabel;
     private JLabel celLabel;
+
     JButton forrasFileButton;
     JTextField datumOszlopSorszamaArea;
     JTextField nevOszlopSorszamaArea;
@@ -21,13 +22,13 @@ public class PickFileToRead extends JFrame implements ActionListener {
     public PickFileToRead() {
         this.setTitle("Elso utolso meres");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setLayout(new FlowLayout());
+        this.setLayout(new GridLayout(0,2));
         forrasFileButton = new JButton("Forrasfile");
         forrasFileButton.addActionListener(this);
         this.getContentPane().add(forrasFileButton);
-        datumOszlopSorszamaArea = new JTextField("Datum Oszlop Sorszama");
+        datumOszlopSorszamaArea = new JTextField("1");
         this.getContentPane().add(datumOszlopSorszamaArea);
-        nevOszlopSorszamaArea = new JTextField("Nev Oszlop Sorszama");
+        nevOszlopSorszamaArea = new JTextField("0");
         this.getContentPane().add(nevOszlopSorszamaArea);
         celFileButton = new JButton("Celfile");
         celFileButton.addActionListener(this);
@@ -38,15 +39,20 @@ public class PickFileToRead extends JFrame implements ActionListener {
 
         datumLabel= new JLabel("Datum Oszlop Sorszama");
         datumLabel.setLabelFor(datumOszlopSorszamaArea);
-//        this.getContentPane().add(datumLabel);
+       this.getContentPane().add(datumLabel);
 
         this.getContentPane().add(datumOszlopSorszamaArea);
         nevLabel = new JLabel("Nev Oszlop Sorszama");
         nevLabel.setLabelFor(nevOszlopSorszamaArea);
-//        this.getContentPane().add(nevLabel);
+        this.getContentPane().add(nevLabel);
         this.getContentPane().add(nevOszlopSorszamaArea);
         this.getContentPane().add(celFileButton);
+        celLabel = new JLabel("");
+        this.getContentPane().add(celLabel);
+
         this.getContentPane().add(forrasFileButton);
+        forrasLabel = new JLabel("");
+        this.getContentPane().add(forrasLabel);
         this.getContentPane().add(goButton);
 
 
@@ -66,7 +72,7 @@ public class PickFileToRead extends JFrame implements ActionListener {
 
             if(response == JFileChooser.APPROVE_OPTION) {
                forrasfile= fileChooser.getSelectedFile().getAbsolutePath();
-
+               forrasLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
             }
         }
         if(e.getSource() == celFileButton) {
@@ -78,7 +84,7 @@ public class PickFileToRead extends JFrame implements ActionListener {
 
             if(response == JFileChooser.APPROVE_OPTION) {
                celfile = fileChooser.getSelectedFile().getAbsolutePath();
-
+               celLabel.setText(fileChooser.getSelectedFile().getAbsolutePath());
             }
         }
         if(e.getSource() == goButton) {
