@@ -1,10 +1,13 @@
 package org.blackfish;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 import java.time.LocalDate;
@@ -19,6 +22,11 @@ public class ExcelWriter {
 
         //Create a blank sheet
         XSSFSheet sheet = workbook.createSheet("Eredmenyek");
+        CreationHelper createHelper = workbook.getCreationHelper();
+        CellStyle cellStyle = workbook.createCellStyle();
+
+        short format = createHelper.createDataFormat().getFormat("m.d.yy h:mm");
+        cellStyle.setDataFormat(format);
         //Napibontas kiirasa
         int rowNum = 0;
         for (LocalDate nap :
@@ -37,17 +45,19 @@ public class ExcelWriter {
                 //elsomeres
                 Cell elsoMeres = emberAznapiElsoUtolso.createCell(1);
                 elsoMeres.setCellValue(napiBontas.get(nap).get(ember).first());
+                elsoMeres.setCellStyle(cellStyle);
                 //masodikmeres
                 Cell masodikMeres = emberAznapiElsoUtolso.createCell(2);
-                masodikMeres.setCellValue(napiBontas.get(nap).get(ember).first());
+                masodikMeres.setCellStyle(cellStyle);
+                masodikMeres.setCellValue(napiBontas.get(nap).get(ember).last());
                 Row uresSorPerEmber = sheet.createRow(rowNum++);
             }
         }
         try {
             //Write the workbook in file system
-            URL url = ExcelWriter.class.getClassLoader().getResource(
-                    kimenoFileNev);
-            FileOutputStream out = new FileOutputStream(url.getFile());
+
+            FileOutputStream out = new FileOutputStream(
+                    new File(kimenoFileNev));
             workbook.write(out);
             out.close();
 

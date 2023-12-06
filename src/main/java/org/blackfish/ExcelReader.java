@@ -6,8 +6,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.time.LocalDateTime;
@@ -18,13 +16,15 @@ import java.util.TreeSet;
 
 
 public class ExcelReader {
-    Logger logger = LoggerFactory.getLogger(ExcelReader.class);
+
 
     public NapiBontas readExcel(String filenev, int datumOszlopSorszama, int nevSorszama) {
         try {
+            System.out.println("filenev" + filenev);
+//            filenev = "/Users/peterszilagyi/Downloads/RekaKnorrExcel/peldadatum.xlsx";
             //"c:/temp/fastexcel-demo.xlsx" filenevepelda
             FileInputStream file = new FileInputStream(filenev);
-            IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);
+
 
             //Create Workbook instance holding reference to .xlsx file
             XSSFWorkbook workbook = new XSSFWorkbook(file);
@@ -33,19 +33,20 @@ public class ExcelReader {
             XSSFSheet sheet = workbook.getSheetAt(0);
             //Iterate through each rows one by one
             Iterator<Row> rowIterator = sheet.iterator();
+            rowIterator.next();
             NapiBontas napiBontas = csinaljNapiBontast(rowIterator, nevSorszama, datumOszlopSorszama);
 
 
             file.close();
             return napiBontas;
         } catch (Exception e) {
-            logger.error(e.toString());
+            System.out.println(e);
         }
         return null;
     }
 
     private NapiBontas csinaljNapiBontast(Iterator<Row> rowIterator, int nevSorszama, int datumOszlopSorszama) {
-         NapiBontas napiBontas= new NapiBontas();
+        NapiBontas napiBontas = new NapiBontas();
 
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
@@ -81,7 +82,7 @@ public class ExcelReader {
             LocalDateTime meresDatumIdo = meresDatumIdoCella.getLocalDateTimeCellValue();
             return meresDatumIdo;
         } catch (Exception e) {
-            logger.error("Nev cella nem string, sor index:" + meresDatumIdoCella.getRowIndex() + " oszlop index: " + meresDatumIdoCella.getColumnIndex()
+            System.out.println("Nev cella nem string, sor index:" + meresDatumIdoCella.getRowIndex() + " oszlop index: " + meresDatumIdoCella.getColumnIndex()
                     + "cella tartalom: " + meresDatumIdoCella.getStringCellValue());
             throw new RuntimeException();
 
@@ -90,7 +91,7 @@ public class ExcelReader {
 
     private String getNameFromCell(Cell nevCella) {
         if (nevCella.getCellType() != CellType.STRING) {
-            logger.error("Nev cella nem string, sor index:" + nevCella.getRowIndex() + " oszlop index: " + nevCella.getColumnIndex());
+            System.out.println("Nev cella nem string, sor index:" + nevCella.getRowIndex() + " oszlop index: " + nevCella.getColumnIndex());
         }
         return nevCella.getStringCellValue();
     }
